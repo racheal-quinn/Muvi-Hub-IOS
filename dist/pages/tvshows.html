@@ -1,0 +1,125 @@
+<div class="progressbar-infinite horizontal_scroll_progress_1"></div>
+<div class="page" data-name="shows_page" id="main">
+    <div class="navbar navbar-large">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner sliding">
+            <div class="left">
+                <a class="link icon-only panel-open" data-panel=".panel-left">
+                    <i class="icon f7-icons if-not-md">menu</i>
+                    <i class="icon material-icons if-md">menu</i>
+                </a>
+            </div>
+            <div class="title">Tv shows</div>
+            <div class="right">
+                <!-- Link to enable searchbar -->
+                <a class="link icon-only search_icon">
+                    <i class="icon material-icons">search</i>
+                </a>
+            </div>
+            <div class="title-large">
+                <div class="title-large-text">Tv shows</div>
+            </div>
+            <!-- Searchbar is a direct child of navbar-inner -->
+            <form id="searchbar-expandable" class="searchbar searchbar-expandable">
+                <div class="searchbar-inner">
+                    <div class="searchbar-input-wrap">
+                        <input type="search" placeholder="Search movies and tv shows">
+                        <i class="searchbar-icon"></i>
+                        <span class="input-clear-button"></span>
+                    </div>
+                    <span class="searchbar-disable-button">Cancel</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="page-content infinite-scroll-content" id="show_scroll">
+        <!-- Swiper -->
+        <div class="swiper mySwiper1">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+                <div class="swiper-slide">
+                    <img src="placeholder.jpg" class="swiper-slide-image1 movie_poster " />
+                </div>
+            </div>
+        </div>
+        <div class="swiper_details">
+            <h2 class="slider_title1">Show name</h2>
+            <ul>
+                <li>Tv show</li>
+                <li class="slider_genres_show">Action, Adventure</li>
+            </ul>
+        </div>
+        <div class="slider_buttons">
+            <div class="slider_button wishlist_button_movie1" data-action="wishlistSlider">
+                <span style="pointer-events: none;" class="material-icons-outlined">bookmark_add</span>
+                <span>Wishlist</span>
+            </div>
+            <button class="button button-fill button-large preview_btn_movie1" data-page="main" data-name="tv">
+                Preview
+            </button>
+            <div class="slider_button">
+                <span class="material-icons-outlined">info</span>
+                <!-- <span style="pointer-events: none;"><i class="f7-icons">info_circle</i></span> -->
+                <span>Details</span>
+            </div>
+        </div>
+        <div class="shows_dom dom"></div>
+        <div class="preloader infinite-scroll-preloader" id="show_scroll_preloader"></div>
+    </div>
+</div>

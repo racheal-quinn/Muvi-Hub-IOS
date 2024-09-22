@@ -1,0 +1,106 @@
+<template>
+    <div class="page no-toolbar" data-name="page_name">
+        <div class="navbar no-shadow no-border">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link icon-only back">
+                        <i class="icon material-icons">arrow_back</i>
+                    </a>
+                </div>
+                <div class="title">Wishlist</div>
+                <div class="right">
+                    <a class="link icon-only">
+                        <i class="icon material-icons">download</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="wishlist_dom"></div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .wishlist_dom {
+        padding: 5px;
+    }
+
+    .wishlist_dom {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 5px;
+    }
+
+    .wishlist_dom .media_card {
+        position: relative;
+    }
+
+    .wishlist_dom .media_card .delete_button {
+        position: absolute;
+        z-index: 2;
+        right: .5rem;
+        top: .2rem;
+    }
+
+    .wishlist_dom .media {
+        width: 100%;
+        height: 220px;
+        background-color: #515151;
+        border-radius: 5px;
+    }
+
+    .wishlist_dom .media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    .wishlist_dom .details h4 {
+        margin: 5px 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.769);
+    }
+
+    .wishlist_dom .details p {
+        margin: 0;
+        color: gray;
+    }
+
+    @media screen and (max-width: 375px) {
+        .wishlist_dom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 10px;
+            row-gap: 5px;
+        }
+    }
+</style>
+
+<script>
+    import Storage from "../../src/storage.js";
+    import { renderWishMedia } from '../../src/ui.js';
+    export default function (props, { $f7, $on }) {
+        // tmdb options
+        const options = {
+            method: "GET",
+            headers: {
+                accept: "application/json",
+                Authorization:
+                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMDZjMzQ1MjY2MzBjNGQ5Y2I3ZjhhNjBiMjgzMzljMSIsInN1YiI6IjY1NWY3ZDg1MmIxMTNkMDEyZDAxYmViMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8nGJfNpyVKghpYZMcw8U7GT2c64_4t5wDLBU9GreKIY",
+            },
+        };
+        $on("pageInit", (e, page) => {
+            var wishDOM = document.querySelector('.wishlist_dom');
+            var wishlist = Storage.getWishlist();
+            renderWishMedia(wishlist, wishDOM)
+        });
+
+        // Return render function
+        return $render;
+    }
+</script>

@@ -1,0 +1,268 @@
+<template>
+    <div class="page no-toolbar">
+        <div class="page-content detail_content">
+            <main>
+                <header id="header" class="show_page_1_header">
+                    <img class="backdrop-img lazy" src="../back_placeholder.jpeg"
+                        data-src="https://image.tmdb.org/t/p/w1280${props.mediaObj.backdrop_path}" />
+                    <div class="overlay"></div>
+                    <div class="details">
+                        <div class="overview">
+                            <img src="../placeholder.jpg"
+                                data-src="https://image.tmdb.org/t/p/w500/${props.mediaObj.poster_path}"
+                                class="poster lazy" />
+                            <div class="stats">
+                                ${props.mediaObj.logo_path ? $h`
+                                <img src="https://image.tmdb.org/t/p/w300${props.mediaObj.logo_path}" class="logo" />
+                                ` : $h`
+                                <h2>${props.mediaObj.title}</h2>
+                                `}
+                                <div>
+                                    <span>
+                                        <i class="icon material-icons">star</i> ${props.mediaObj.vote_average}
+                                    </span>
+                                    <span></span>
+                                    <span class="page_year_1"></span>
+                                    <span class="show_page_1_genres"></span>
+                                </div>
+                            </div>
+                        </div>
+                        ${props.mediaObj.media_available ? $h`
+                        <div class="buttons grid grid-cols-2 grid-gap">
+                            <button class="button button-large button-fill change_season_btn_1"
+                                data-id="${props.mediaObj.id}"></button>
+                            <button class="button button-large button-fill"
+                                data-id="${props.mediaObj.id}">Download</button>
+                        </div>
+                        ` : $h`
+                        <div class="unavailable">
+
+                        </div>
+                        `}
+                        <div class="action_buttons">
+                            <div class="action_button action_icon wishlist_btn_page_3" data-action="wishlistPage"
+                                data-id="${props.mediaObj.id}">
+                                <span class="material-icons-outlined">bookmark_add</span>
+                                <span>Wishlist</span>
+                            </div>
+                            ${!props.mediaObj.media_available && $h`
+                            <div class="action_button action_icon request_btn_page_3" data-action="request"
+                                data-id="${props.mediaObj.id}" data-name="${props.mediaObj.name}">
+                                <span class="material-icons-outlined">send</span>
+                                <span>Request</span>
+                            </div>
+                            `}
+                            <div class="action_button share_btn" data-id="${props.mediaObj.id}" data-type="serie"
+                                data-name="${props.mediaObj.name}"
+                                data-poster="https://image.tmdb.org/t/p/w500/${props.mediaObj.poster_path}">
+                                <span class="material-icons-outlined">share</span>
+                                <span>Share</span>
+                            </div>
+                            ${props.mediaObj.trailers && $h`
+                            <div class="action_button play_trailer trailer_btn"
+                                data-key="${props.mediaObj.trailers[0].key}">
+                                <span style="pointer-events: none;" class="material-icons-outlined">play_arrow</span>
+                                <span>Trailer</span>
+                            </div>
+                            `}
+                        </div>
+                    </div>
+                </header>
+                <section>
+                    <div class="toolbar toolbar-top tabbar page_toolbar_1">
+                        <div class="toolbar-inner">
+                            ${props.mediaObj.media_available ? $h`
+                            <a href="#collection3" class="tab-link tab-link-active">Episodes</a>
+                            <a href="#overview3" class="tab-link">Overview</a>
+                            <a href="#cast3" class="tab-link">Cast</a>
+                            <a href="#related_show_page_1" class="tab-link">Related</a>
+                            ` : $h`
+                            <a href="#overview3" class="tab-link tab-link-active">Overview</a>
+                            <a href="#cast3" class="tab-link">Cast</a>
+                            <a href="#related_show_page_1" class="tab-link">Related</a>
+                            `}
+                        </div>
+                    </div>
+                    <div class="tabs">
+                        ${props.mediaObj.media_available ? $h`
+                        <div id="collection3" class="page-content tab tab-active detail_content">
+                            <div class="list media-list  list-outline-ios list-strong-ios list-dividers-ios episodes ">
+                                <ul class="show_1_collection">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="overview3" class="page-content tab detail_content">
+                            <div class="block">${props.mediaObj.overview}</div>
+                        </div>
+                        <div id="cast3" class="page-content tab detail_content">
+                            <div class="list media-list  list-outline-ios list-strong-ios list-dividers-ios">
+                                <ul class="cast_show_page_1">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="related_show_page_1" class="page-content tab infinite-scroll-content detail_content">
+                            <div class="list media-list list-outline-ios list-strong-ios list-dividers-ios">
+                                <ul class="show_page_1_related"></ul>
+                                <div class="preloader infinite-scroll-preloader" id="related_show_1_preloader"></div>
+                            </div>
+                        </div>
+                        ` : $h`
+                        <div id="overview3" class="page-content tab tab-active detail_content">
+                            <div class="block movie_page_1_overview">${props.mediaObj.overview}</div>
+                        </div>
+                        <div id="cast3" class="page-content tab detail_content">
+                            <div class="list media-list  list-outline-ios list-strong-ios list-dividers-ios">
+                                <ul class="cast_show_page_1"></ul>
+                            </div>
+                        </div>
+                        <div id="related_show_page_1" class="page-content infinite-scroll-content tab detail_content">
+                            <div class="list media-list  list-outline-ios list-strong-ios list-dividers-ios">
+                                <ul class="show_page_1_related">
+
+                                </ul>
+                                <div class="preloader infinite-scroll-preloader" id="related_show_1_preloader"></div>
+                            </div>
+                        </div>
+                        `}
+                    </div>
+                </section>
+            </main>
+        </div>
+        <div class="actions-modal season-preference-actions">
+            <div class="block-title">Seasons</div>
+            <div class="block season_preferences_dom">
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+
+</style>
+
+<script>
+    import Storage from "../../src/storage.js";
+    import { options } from "../../src/ui.js";
+    import { getCollectionData } from "../../src/ui.js";
+    import { renderCollection } from "../../src/ui.js";
+    import { renderCast } from "../../src/ui.js";
+    import { renderEpisodes } from "../../src/ui.js";
+    import { renderTime } from "../../src/ui.js";
+    import { renderYear } from "../../src/ui.js";
+    import '../../node_modules/animate.css';
+
+    export default function (props, { $f7, $on, $ }) {
+        $on("pageInit", async (e, page) => {
+            NavigationBar.backgroundColorByHexString('#1e1a1d', false);
+            props.mediaObj.seasons = props.mediaObj.seasons.sort((a, b) => a.season_number - b.season_number).filter(season => season.episodes != null);
+            var wishlist = Storage.getWishlist();
+            var wishListButton = document.querySelector('.wishlist_btn_page_3');
+            var isWishListed = wishlist.find(media => media.id == props.mediaObj.id);
+            if (isWishListed) {
+                wishListButton.firstElementChild.className = 'material-icons';
+                wishListButton.lastElementChild.innerText = 'Added';
+                wishListButton.style.pointerEvents = 'none';
+            }
+            // check requested
+            var requestList = Storage.getRequestList();
+            var isRequested = requestList.find(media => media.id == props.mediaObj.id);
+            if (isRequested && !props.mediaObj.media_available) {
+                var requestButton = document.querySelector('.request_btn_page_3');
+                requestButton.firstElementChild.className = 'material-icons-outlined';
+                requestButton.lastElementChild.innerText = 'Sent';
+                requestButton.style.pointerEvents = "none";
+            }
+            // variables
+            var showData = await Storage.getMedia('serie');
+            showData = showData.filter(data => data.id != props.mediaObj.id);
+            // change season episodes
+            if (props.mediaObj.media_available) {
+                var collectionDOM = document.querySelector('.show_1_collection');
+                renderEpisodes(collectionDOM, props.mediaObj.seasons[0].episodes, props.mediaObj.id);
+                let seasonPreferenceDOM = document.querySelector('.season_preferences_dom');
+                var changeSeasonBtn = document.querySelector('.change_season_btn_1');
+                changeSeasonBtn.innerText = props.mediaObj.seasons[0].name;
+                changeSeasonBtn.addEventListener('click', async () => {
+                    seasonPreferenceDOM.innerHTML = '';
+                    let id = event.target.dataset.id;
+                    props.mediaObj.seasons.forEach(season => {
+                        let button = document.createElement('button');
+                        button.innerText = season.name;
+                        button.className = 'button button-fill margin-bottom actions-close season_episodes_btn';
+                        button.setAttribute('data-season-number', season.name);
+                        button.setAttribute('data-show-id', id);
+                        seasonPreferenceDOM.appendChild(button);
+                    });
+                    $f7.actions.open('.season-preference-actions', true);
+                })
+                seasonPreferenceDOM.addEventListener('click', (event) => {
+                    if (event.target.classList.contains('season_episodes_btn')) {
+                        let seasonName = event.target.dataset.seasonNumber;
+                        let season = props.mediaObj.seasons.find(season => season.name == seasonName);
+                        changeSeasonBtn.innerText = season.name;
+                        console.log(season);
+                        collectionDOM.innerHTML = '';
+                        renderEpisodes(collectionDOM, season.episodes, props.mediaObj.id);
+                    }
+                })
+            }
+            // render year
+            var year = document.querySelector('.page_year_1');
+            year.innerHTML = renderYear(props.mediaObj.first_air_date);
+            document.querySelector('.show_page_1_genres').innerText = props.mediaObj.genres.map(friend => friend.name).join(', ');
+            // cast logic
+            var castDOM = document.querySelector('.cast_show_page_1');
+            if (props.mediaObj.cast.length > 0) {
+                var castArr = props.mediaObj.cast.slice(0, 10);
+                renderCast(castArr, castDOM);
+            }
+
+            // related logic
+            var relatedDOM = document.querySelector('.show_page_1_related');
+            var currentPosition;
+            const selectedMovieGenres = props.mediaObj.genres;
+
+            var query = relatedDOM.children.length > 0;
+            if (query) {
+                currentPosition = relatedDOM.children.length;
+            } else {
+                const filteredMedia = showData.filter(item => {
+                    const matchingGenresCount = selectedMovieGenres.filter(selectedGenre =>
+                        item.genres.some(itemGenre => itemGenre.id === selectedGenre.id)
+                    ).length;
+                    return matchingGenresCount >= 2;
+                });
+                renderCollection(filteredMedia.slice(0, 15), relatedDOM, 'sub');
+                currentPosition = 15;
+            }
+            var loading = false
+            $('#related_show_page_1').on('infinite', () => {
+                if (!loading) {
+                    loading = true;
+                    setTimeout(async () => {
+                        const filteredMedia = showData.filter(item => {
+                            const matchingGenresCount = selectedMovieGenres.filter(selectedGenre =>
+                                item.genres.some(itemGenre => itemGenre.id === selectedGenre.id)
+                            ).length;
+                            return matchingGenresCount >= 2;
+                        });
+                        const mediaPortion = filteredMedia.slice(currentPosition, currentPosition + 15)
+                        renderCollection(mediaPortion, relatedDOM, 'sub');
+                        currentPosition += 15;
+
+                        if (currentPosition >= filteredMedia.length) {
+                            console.log('related content is done ! ');
+                            $f7.infiniteScroll.destroy('#related_show_page_1');
+                            $('#related_show_1_preloader').remove();
+                        }
+                        loading = false;
+                    }, 500);
+                }
+            })
+        });
+        return $render;
+    }
+</script>

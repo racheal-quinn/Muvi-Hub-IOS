@@ -1,0 +1,366 @@
+<template>
+    <div class="page no-toolbar">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Muvihub Chat Room</div>
+            </div>
+        </div>
+        <div class="toolbar messagebar" @messagebar:attachmentdelete=${deleteAttachment}>
+            <div class="toolbar-inner">
+                <a class="link icon-only" @click=${sheetToggle}>
+                    <i class="icon f7-icons if-not-md">camera_fill</i>
+                    <i class="icon material-icons md-only">camera_alt</i>
+                </a>
+                <div class="messagebar-area">
+                    <textarea class="resizable message_input" placeholder="Message"></textarea>
+                </div>
+                <a class="link icon-only demo-send-message-link" @click=${sendMessage}>
+                    <i class="icon f7-icons if-not-md">arrow_up_circle_fill</i>
+                    <i class="icon material-icons md-only">send</i>
+                </a>
+            </div>
+            <div class="messagebar-sheet">
+                <div class="searchbar searchbar-inline">
+                    <div class="searchbar-input-wrap">
+                        <input type="search" placeholder="Search for movie or show to share.."
+                            @input="${debounce(searchMedia, 500)}" />
+                        <i class="searchbar-icon"></i>
+                        <span class="input-clear-button"></span>
+                    </div>
+                </div>
+                <div class="message-sheet-dom">
+
+                </div>
+            </div>
+        </div>
+        <div class="page-content messages-content">
+            <div class="messages">
+                <div class="messages-title"><b>Sunday, Feb 9,</b> 12:58</div>
+                <div class="message message-sent">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="message-text">Hi, Kate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-sent">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="message-text">How are you?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-received">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-name">Kate</div>
+                        <div class="message-bubble">
+                            <div class="message-text">Hi, I am good!</div>
+                            <div class="message-text-footer">19/06/2023</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-received">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-name">Blue Ninja</div>
+                        <div class="message-bubble">
+                            <div class="message-text">Hi there, I am also fine, thanks! And how are you?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-sent">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="message-text">Hey, Blue Ninja! Glad to see you ;)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-sent">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="message-text">Hey, look, cutest kitten ever!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-sent">
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <div class="message-image">
+                                <img src="https://cdn.framework7.io/placeholder/cats-200x260-4.jpg"
+                                    style="width:200px; height: 260px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-received">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-name">Kate</div>
+                        <div class="message-bubble">
+                            <div class="message-text">Nice!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-received">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-name">Kate</div>
+                        <div class="message-bubble">
+                            <div class="message-text">Like it very much!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="message message-received">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-7.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-name">Blue Ninja</div>
+                        <div class="message-bubble">
+                            <div class="message-text">Awesome!</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div
+                    class="message message-received message-typing message-appear-from-bottom message-first message-last message-tail">
+                    <div class="message-avatar"
+                        style="background-image:url(https://cdn.framework7.io/placeholder/people-100x100-9.jpg)"></div>
+                    <div class="message-content">
+                        <div class="message-header">Kate Johnson is typing</div>
+                        <div class="message-bubble">
+                            <div class="message-text">
+                                <div class="message-typing-indicator">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import { ref, onValue, set, get, child, push, onChildAdded, orderByChild, query, limitToLast } from "../../node_modules/firebase/database";
+    import { database } from "../../src/data.js";
+    import { time } from "../../src/data.js";
+    import Storage from "../../src/storage.js";
+    import { options2 } from "../../src/ui.js";
+    var initialMessagesLoaded;
+    export default (props, { $f7, $el, $on, $ }) => {
+        var images = [];
+        var resultsArr = [];
+        let responseInProgress = false;
+        let messagebar;
+        let messages;
+        const messagesRef = ref(database, 'messages/');
+        const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(10));
+        var currentUser = Storage.getUser();
+        const sheetToggle = () => {
+            messagebar.sheetToggle();
+        }
+        const deleteAttachment = (e, index) => {
+            var image = messagebar.attachments.splice(index, 1)[0];
+            messagebar.renderAttachments();
+            checkAttachments();
+            // Uncheck in sheet
+            var imageIndex = images.indexOf(image);
+            $el.value.find('.messagebar-sheet .checkbox').eq(imageIndex).find('input').prop('checked', false);
+        }
+        const handleAttachment = (e) => {
+            var index = $(e.target).parents('label.checkbox').index();
+            var id = e.target.dataset.id;
+            var obj = resultsArr.find(result => result.id == id);
+            var image = `https://image.tmdb.org/t/p/w500${obj.poster_path}`;
+            if (e.target.checked) {
+                // Add to attachments
+                messagebar.attachments.unshift(image)
+            } else {
+                // Remove from attachments
+                messagebar.attachments.splice(messagebar.attachments.indexOf(image), 1);
+            }
+            messagebar.renderAttachments();
+            checkAttachments();
+        }
+        const checkAttachments = () => {
+            if (messagebar.attachments.length > 0) {
+                messagebar.attachmentsShow();
+                messagebar.setPlaceholder('Add comment or Send');
+            } else {
+                messagebar.attachmentsHide();
+                messagebar.setPlaceholder('Message');
+            }
+        }
+        const debounce = (func, delay) => {
+            let timer;
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(context, args);
+                }, delay);
+            };
+        }
+        const fetchSearchResults = async (query) => {
+            const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1`, options2);
+            const data = await response.json();
+            return data.results;
+        }
+        const searchMedia = async (event) => {
+            var searchDOM = document.querySelector('.message-sheet-dom');
+            searchDOM.innerHTML = '';
+            const inputValue = event.target.value;
+            let results = await fetchSearchResults(inputValue);
+            resultsArr = results;
+            results.forEach(result => {
+                images = [];
+                images.push(`https://image.tmdb.org/t/p/w500/${result.poster_path}`);
+                let label = document.createElement('label');
+                label.className = 'checkbox messagebar-sheet-image';
+                // label.dataset.id = result.id;
+                label.addEventListener('change', handleAttachment);
+                label.innerHTML = `
+                    <input type="checkbox" data-id="${result.id}" />
+                    <i class="icon icon-checkbox"></i>
+                    <img class="lazy poster" src= "./placeholder.jpg" data-src=https://image.tmdb.org/t/p/w500/${result.poster_path} />
+                `
+                searchDOM.appendChild(label);
+            })
+            lazyLoadInstance.update();
+        }
+        const sendMessage = () => {
+            var text = messagebar.getValue().replace(/\n/g, '<br />').trim();
+            var messagesToSend = [];
+            messagebar.attachments.forEach(function (attachment) {
+                let parts = attachment.split('/');
+                var posterURL = parts[parts.length - 1];
+                let movieObj = resultsArr.find(result => result.poster_path == `/${posterURL}`);
+                messagesToSend.push({
+                    image: `<img src="${attachment}" data-id="" alt="" srcset="" style="width: 160px; height: 240px;">`,
+                    id: currentUser.userId,
+                });
+            });
+            if (text.trim().length) {
+                messagesToSend.push({
+                    text: text,
+                    id: currentUser.userId,
+                    name: currentUser.userName,
+                    avatar: currentUser.userAvatar,
+                    timestamp: Date.now(),
+                });
+            }
+            console.log(messagesToSend);
+            // Reset attachments
+            messagebar.attachments = [];
+            checkAttachments();
+            // Hide sheet
+            messagebar.sheetHide();
+            // Uncheck selected images in sheet
+            messagebar.$sheetEl.find('input').prop('checked', false);
+            // Clear area
+            messagebar.clear();
+            // Focus area
+            if (text.length) messagebar.focus();
+            // Exit when nothing to send
+            if (!messagesToSend.length) return;
+            // Send message
+            push(messagesRef, messagesToSend).then(() => { console.log('Message sent successfully.'); })
+        }
+
+        $on('pageInit', () => {
+            messagebar = $f7.messagebar.create({
+                el: $el.value.find('.messagebar'),
+                attachments: []
+            });
+            // Create message instance
+            messages = $f7.messages.create({
+                el: $el.value.find('.messages'),
+                firstMessageRule: function (message, previousMessage, nextMessage) {
+                    if (message.isTitle) return false;
+                    if (!previousMessage || previousMessage.type !== message.type || previousMessage.name !== message.name) return true;
+                    return false;
+                },
+                lastMessageRule: function (message, previousMessage, nextMessage) {
+                    if (message.isTitle) return false;
+                    if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+                    return false;
+                },
+                tailMessageRule: function (message, previousMessage, nextMessage) {
+                    if (message.isTitle) return false;
+                    if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
+                    return false;
+                }
+            });
+            // 1. Listen for send message button
+            document.querySelector('.demo-send-message-link').addEventListener('click', function () {
+                var messageText = messagebar.getValue().replace(/\n/g, '<br />').trim();
+                if (messageText.length === 0) return;
+                // Add message to the database
+                var message = {
+                    text: messageText,
+                    userId: currentUser.userId,
+                    userName: currentUser.userName,
+                    avatar: currentUser.userAvatar,
+                    type: 'sent',
+                    timestamp: Date.now(),
+                }
+                push(messagesRef, message).then(() => { console.log('Message sent successfully.'); })
+                // Clear the messagebar
+                messagebar.clear();
+            });
+            // Fetch the last 10 messages from Firebase
+            get(messagesQuery).then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val(); // The array stored under the unique key
+                        // Modifying each object within the array
+                        let newArray = data.map((message) => {
+                            return {
+                                ...message,
+                                type: message.id == currentUser.userId ? 'sent' : 'received'
+                            };
+                        });
+                        messages.addMessages(newArray.reverse(), 'append');
+                    });
+                    initialMessagesLoaded = true; // Set the flag after loading initial messages
+                } else {
+                    console.log("No data available");
+                    initialMessagesLoaded = true; // Set the flag after loading initial messages
+                }
+            }).catch((error) => {
+                console.error("Error getting data:", error);
+            });
+            // Listen for new messages
+            onChildAdded(messagesRef, function (snapshot) {
+                if (initialMessagesLoaded) {
+                    const data = snapshot.val(); // The array stored under the unique key
+                    // Modifying each object within the array
+                    let newArray = data.map((message) => {
+                        return {
+                            ...message,
+                            type: message.id == currentUser.userId ? 'sent' : 'received'
+                        };
+                    });
+                    messages.addMessages(newArray.reverse(), 'append');
+                }
+            })
+            // messagesRef.on('child_added');
+        });
+        return $render;
+    };
+
+</script>
