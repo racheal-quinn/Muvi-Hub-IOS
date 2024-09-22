@@ -1,0 +1,195 @@
+<template>
+    <div class="page no-toolbar" data-name="more_page">
+        <div class="navbar no-shadow no-border">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+                <div class="left">
+                    <a class="link icon-only back">
+                        <i class="icon material-icons">arrow_back</i>
+                    </a>
+                </div>
+                <div class="title">${props.title}</div>
+            </div>
+        </div>
+        <div class="page-content infinite-scroll-content" id="more_scroll">
+            <div class="more_dom movies_dom">
+
+            </div>
+            <div class="preloader infinite-scroll-preloader" id="more_preloader"></div>
+        </div>
+    </div>
+</template>
+
+<style>
+    .more_dom {
+        padding: 5px;
+    }
+
+    .more_dom {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+        column-gap: 10px;
+        row-gap: 5px;
+    }
+
+    .more_dom .media_card {
+        overflow: hidden;
+    }
+
+    .more_dom .media {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        background-color: #515151;
+        border-radius: 5px;
+    }
+
+    .more_dom .media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .more_dom .media .media_vj {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        background-color: #30262e;
+        padding: 2px 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .more_dom .details h4 {
+        margin: 5px 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.769);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .more_dom .details p {
+        margin: 0;
+        color: gray;
+    }
+
+    @media (max-width: 400px) {
+        .more_dom {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+            column-gap: 10px;
+        }
+
+        .more_dom .media {
+            height: 170px;
+        }
+
+        .more_dom .details h4 {
+            font-size: 12px;
+        }
+
+        .more_dom .details p {
+            font-size: 10px;
+        }
+
+        .more_dom .media .media_vj {
+            font-size: 10px;
+        }
+    }
+</style>
+
+<script>
+    // import necessary functions
+    import { getTrendingMedia } from '../../src/ui.js';
+    import { getPopularMedia } from '../../src/ui.js';
+    import { getAiringShows } from '../../src/ui.js';
+    import { renderScrollMedia } from '../../src/ui.js';
+
+    var loadedDOM = {};
+    var currentPage;
+    var dataState = {};
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMDZjMzQ1MjY2MzBjNGQ5Y2I3ZjhhNjBiMjgzMzljMSIsInN1YiI6IjY1NWY3ZDg1MmIxMTNkMDEyZDAxYmViMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8nGJfNpyVKghpYZMcw8U7GT2c64_4t5wDLBU9GreKIY'
+        }
+    }
+    export default function (props, { $, $f7, $on }) {
+        $on('pageBeforeIn', (e, page) => {
+            lazyLoadInstance.update();
+        });
+        $on('pageInit', (e, page) => {
+            // variables
+            var moreDOM = document.querySelector('.more_dom');
+            // load DOM
+            moreDOM.innerHTML = loadedDOM[props.containerId] ? loadedDOM[props.containerId] : props.content;
+            currentPage = Math.round((moreDOM.children.length / 20) + 1);
+            if (props.containerState && !(currentPage > 5)) {
+                var loading = false
+                $('#more_scroll').on('infinite', () => {
+                    if (!loading) {
+                        loading = true;
+                        setTimeout(() => {
+                            if (props.title === "Popular") {
+                                var apiTitle = props.title.toLowerCase();
+                                getPopularMedia(props.mediaType, apiTitle, currentPage)
+                                    .then(data => {
+                                        console.log(`the appended content is  ${apiTitle} ${props.mediaType}s and started from`, currentPage);
+                                        renderScrollMedia(data, moreDOM)
+                                        currentPage += 1;
+                                        if (currentPage > 5) {
+                                            console.log('destroyed');
+                                            $f7.infiniteScroll.destroy('#more_scroll');
+                                            $('#more_preloader').remove();
+                                            return
+                                        }
+                                    })
+                            } else if (props.title === "Trending") {
+                                var apiTitle = props.title.toLowerCase();
+                                getTrendingMedia(props.mediaType, apiTitle, currentPage)
+                                    .then(data => {
+                                        console.log(`the appended content is ${apiTitle} ${props.mediaType}s and started from`, currentPage);
+                                        renderScrollMedia(data, moreDOM)
+                                        currentPage += 1;
+                                        if (currentPage > 5) {
+                                            console.log('destroyed');
+                                            $f7.infiniteScroll.destroy('#more_scroll');
+                                            $('#more_preloader').remove();
+                                            return
+                                        }
+                                    })
+                            } else {
+                                var apiTitle = props.title.toLowerCase();
+                                getAiringShows(props.mediaType, 'on_the_air', currentPage)
+                                    .then(data => {
+                                        console.log(`the appended content is ${apiTitle} ${props.mediaType}s and started from`, currentPage);
+                                        renderScrollMedia(data, moreDOM)
+                                        currentPage += 1;
+                                        if (currentPage > 5) {
+                                            console.log('destroyed');
+                                            $f7.infiniteScroll.destroy('#more_scroll');
+                                            $('#more_preloader').remove();
+                                            return
+                                        }
+                                    })
+                            }
+                            loading = false;
+                        }, 500)
+                    }
+                })
+            } else {
+                console.log('destroyed');
+                $f7.infiniteScroll.destroy('#more_scroll');
+                $('#more_preloader').remove();
+            }
+        })
+        $on('pageBeforeOut', (e, page) => {
+            var moreDOM = document.querySelector('.more_dom');
+            loadedDOM[props.containerId] = moreDOM.innerHTML;
+        });
+        // Return render function
+        return $render;
+    }
+</script>

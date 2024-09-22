@@ -1,0 +1,48 @@
+{
+  "name": "com.muvi.hub",
+  "displayName": "Muvi",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova app/Users/authentictech/Desktop/Muvi-Hublication that responds to the deviceready event.",
+  "scripts": {
+    "start": "webpack serve --open",
+    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./www/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./www/fonts/ && cpy --flat ./node_modules/framework7/*.js ./www/framework7 && cpy --flat ./node_modules/framework7/*.css ./www/framework7 && cpy --flat ./node_modules/framework7/*.map ./www/framework7",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "dom7": "^4.0.6",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.13.2",
+    "framework7": "^8.3.0",
+    "framework7-icons": "^5.0.5",
+    "idb": "^8.0.0",
+    "material-icons": "^1.13.12",
+    "skeleton-elements": "^4.0.1",
+    "swiper": "^11.1.1",
+    "vanilla-lazyload": "^19.1.3"
+  },
+  "devDependencies": {
+    "cordova-ios": "^7.1.1",
+    "cpy-cli": "^5.0.0",
+    "css-loader": "^6.9.1",
+    "es6-promise-plugin": "^4.2.2",
+    "framework7-loader": "^3.0.2",
+    "http-server": "^14.1.1",
+    "plyr": "^3.7.8",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "cordova": {
+    "platforms": [
+      "ios"
+    ]
+  }
+}

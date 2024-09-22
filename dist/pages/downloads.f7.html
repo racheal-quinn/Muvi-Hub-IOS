@@ -1,0 +1,466 @@
+<template>
+    <div class="page no-toolbar" data-name="downloads_page">
+        <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="if-not-md">Back</span>
+                    </a>
+                </div>
+                <div class="title">Downloads</div>
+            </div>
+        </div>
+        <div class="toolbar toolbar-top tabbar">
+            <div class="toolbar-inner">
+                <a href="#tab-1" class="tab-link tab-link-active no-ripple">
+                    Downloading
+                    <!-- <span class="badge color-red download-badge">5</span> -->
+                </a>
+                <a href="#tab-2" class="tab-link no-ripple download-tab">
+                    Downloads
+                </a>
+            </div>
+        </div>
+        <div class="page-content downloads-page-content">
+            <swiper-container class="tabs">
+                <swiper-slide id="tab-1" class="page-content tab tab-active remove-page-padding">
+                    <p class="margin-left">
+
+                    </p>
+                    <div class="list download-list media-list list-outline-ios list-strong-ios list-dividers-ios">
+                        <ul class="download_dom">
+                            <!-- <li>
+                                <a class="item-link no-ripple">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <div class="overlay">
+                                                <div class="actions hide">
+                                                    <a href="#">
+                                                        <i class="f7-icons cancel_download_btn"
+                                                            data-id="23">xmark_circle</i>
+                                                    </a>
+                                                </div>
+                                                <img
+                                                    src="https://image.tmdb.org/t/p/w1280/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg" />
+                                            </div>
+                                        </div>
+                                        <div class="item-inner">
+                                            <div class="item-title-row">
+                                                <div class="item-title">Dune Part Two</div>
+                                            </div>
+                                            <div class="item-subtitle">
+                                                <span style="display: block;">Movie</span>
+                                                <span class="bytes_dom">
+                                                    <span class="amount_downloaded">12.0 MB </span>/
+                                                    <span class="total_downloaded">430 MB</span>
+                                                </span>
+                                            </div>
+                                            <div class="item-text">
+                                                <p style="margin-top: 2px;" class="progress_dom">
+                                                    <span data-progress="50" class="progressbar"
+                                                        id="download-progressbar"></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </swiper-slide>
+                <swiper-slide id="tab-2" class="page-content tab remove-page-padding">
+                    <div class="list download-list media-list list-outline-ios list-strong-ios list-dividers-ios">
+                        <ul class="downloaded_dom">
+                            <!-- <li>
+                                <a class="item-link no-ripple">
+                                    <div class="item-content">
+                                        <div class="item-media">
+                                            <div class="overlay">
+                                                <div class="actions hide">
+                                                    <a href="#"><i class="f7-icons" data-url="">play_circle</i></a>
+                                                </div>
+                                                <img
+                                                    src="https://image.tmdb.org/t/p/w1280/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg" />
+                                            </div>
+                                        </div>
+                                        <div class="item-inner">
+                                            <div class="item-title-row">
+                                                <div class="item-title">Dune Part Two</div>
+                                            </div>
+                                            <div class="item-subtitle">
+                                                <span style="display: block;">Movie</span>
+                                            </div>
+                                            <div class="item-text">
+                                                <p style="margin-top: 2px; color: var(--f7-theme-color);">Downloaded</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </swiper-slide>
+            </swiper-container>
+        </div>
+    </div>
+</template>
+<style>
+    .remove-page-padding {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .list .item-media {
+        display: inline-block;
+        padding-bottom: 0px;
+    }
+
+    .download-list {
+        margin-top: 0;
+    }
+
+    .item-media .overlay {
+        position: relative;
+        width: 150px;
+        height: 100px;
+        z-index: 1;
+    }
+
+    .item-media .overlay img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+        border-radius: 8px;
+    }
+
+    .download-badge {
+        position: absolute;
+        right: 36px;
+        top: 12px;
+    }
+
+    .item-media .overlay .actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #00000060;
+        z-index: 2;
+        border-radius: 8px;
+    }
+
+    .item-media .overlay .actions a {
+        position: absolute;
+        transform: scale(.7);
+    }
+
+    .item-content.hide .bytes_dom {
+        display: none;
+    }
+
+    .item-content.hide .progress_dom {
+        display: none;
+    }
+</style>
+<script>
+    var downloads = {}; // Object to store multiple download operations
+    var totalFileSizes = {};
+    var downloadTasks = [];
+    var currentIndex = 0;
+    var downloadOperating = null;
+
+    export default function (props, { $f7, $on, $, $store }) {
+        $on("pageMounted", (e, page) => {
+            // duumy files
+            //10mbs https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_10mb.mp4
+            // 5mbs https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_5mb.mp4
+
+            // select UI
+            var downloadDOM = document.querySelector('.download_dom');
+            var downloadedDOM = document.querySelector('.downloaded_dom');
+
+            // display files
+            function readAndDisplayFiles() {
+                downloadedDOM.innerHTML = '';
+                window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function (fileSystem) {
+                    var reader = fileSystem.createReader();
+                    downloadedDOM.innerHTML = '';
+                    reader.readEntries(function (entries) {
+                        entries.forEach(entry => {
+                            if (entry.isFile) {
+                                createCompleteUI(entry.nativeURL, entry.name);
+                            }
+                        });
+                    }, function (err) {
+                        console.error("Error reading directory: ", err);
+                        alert("Error reading directory: " + JSON.stringify(err));
+                    });
+                }, function (err) {
+                    console.error("Error accessing file system: ", err);
+                    alert("Error accessing file system: " + JSON.stringify(err));
+                });
+            }
+            // Download methods
+
+            // Start download
+            function startDownload(downloadId) {
+                if (currentIndex >= downloadTasks.length) {
+                    return;
+                }
+                const fileData = downloadTasks[currentIndex];
+                var uriString = fileData.uriString;
+                var fileName = fileData.fileName;
+                console.log('Download starting ...');
+                window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function (fileSystem) {
+                    fileSystem.getFile(fileName, { create: true }, function (targetFile) {
+                        var downloader = new BackgroundTransfer.BackgroundDownloader();
+                        var download = downloader.createDownload(uriString, targetFile);
+
+                        downloads[downloadId] = download.startAsync().then(
+                            onSuccess.bind(null, downloadId),
+                            onError.bind(null, downloadId),
+                            onProgress.bind(null, downloadId)
+                        );
+                        downloadOperating = downloads[downloadId];
+                    }, function (err) {
+                        console.error("Error accessing target file: ", err);
+                        alert("Error accessing target file: " + JSON.stringify(err));
+                    });
+                }, function (err) {
+                    console.error("Error accessing file system: ", err);
+                    alert("Error accessing file system: " + JSON.stringify(err));
+                });
+            }
+            // create download progress UI
+            function createProgressUI(downloadId) {
+                var list = document.createElement('li');
+                list.className = "animate__animated animate__fadeIn";
+                list.setAttribute('id', `${downloadId}_download_id`);
+                var backdropObj = downloadTasks.find(downloadTask => downloadTask.id == downloadId);
+                console.log('Progress data obj is ', backdropObj);
+                list.innerHTML = `
+                <a class="item-link no-ripple">
+                    <div class="item-content">
+                        <div class="item-media">
+                            <div class="overlay">
+                            <div class="actions hide">
+                                <a href="#">
+                                    <i class="f7-icons cancel_download_btn" data-id="${downloadId}">
+                                        xmark_circle
+                                    </i>
+                                </a>
+                            </div>
+                            <img src="${backdropObj.backdrop}" />
+                            </div>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                            <div class="item-title">${backdropObj.title}</div>
+                            </div>
+                            <div class="item-subtitle">
+                            <span style="display: block;">Movie</span>
+                            <span>
+                                <span class="amount_downloaded${downloadId}">0.0 MB </span>/
+                                <span class="total_downloaded${downloadId}">0.0 MB</span>
+                            </span>
+                            </div>
+                            <div class="item-text">
+                            <p style="margin-top: 2px;">
+                                <span class="progressbar${downloadId}" id="download-progressbar"></span>
+                            </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                `;
+                downloadDOM.appendChild(list);
+                $f7.progressbar.show(`.progressbar${downloadId}`, 0);
+            }
+            // progress functions
+            function formatBytes(bytes, decimals = 2) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+            var onProgress = function (downloadId, progress) {
+                var bytesReceived = progress.bytesReceived;
+                var totalBytes = progress.totalBytesToReceive;
+                var percent = Math.floor((bytesReceived / totalBytes) * 100);
+
+                if (formatBytes(totalBytes)) {
+                    totalFileSizes[downloadId] = formatBytes(totalBytes);
+                    updateProgressNotification(formatBytes(bytesReceived), downloadId, percent, formatBytes(totalBytes));
+                    $f7.progressbar.set(`.progressbar${downloadId}`, percent);
+                    document.querySelector(`.amount_downloaded${downloadId}`).innerText = formatBytes(bytesReceived);
+                    document.querySelector(`.total_downloaded${downloadId}`).innerText = formatBytes(totalBytes);
+                }
+            };
+            // sucess function
+            var onSuccess = function (downloadId, result) {
+                updateProgressNotification(totalFileSizes[downloadId], downloadId, 100, totalFileSizes[downloadId]);
+                $f7.progressbar.set(`.progressbar${downloadId}`, 100);
+                $f7.dialog.alert('Success call back called');
+                document.querySelector(`.amount_downloaded${downloadId}`).innerText = totalFileSizes[downloadId];
+                document.querySelector(`.total_downloaded${downloadId}`).innerText = totalFileSizes[downloadId];
+                var list = document.getElementById(`${downloadId}_download_id`);
+                downloadDOM.removeChild(list);
+                setTimeout(() => {
+                    downloadCompletedNotification(downloadId);
+                    readAndDisplayFiles();
+                    delete downloads[downloadId]; // Remove completed download from the list
+                    downloadTasks = downloadTasks.filter(downloadTask => downloadTask.id != downloadId);
+
+                    downloadOperating = null; // Reset the downloadOperating state
+                    // if (downloadTasks.length > 0) {
+                    //     currentIndex++;
+                    // }
+                    if (currentIndex < downloadTasks.length) {
+                        const nextFileData = downloadTasks[currentIndex];
+                        const nextDownloadId = nextFileData.id;
+                        startDownload(nextDownloadId);
+                    }
+                }, 1000);
+            };
+            // Error call back
+            var onError = function (downloadId, error) {
+                console.error("Error when downloading file : ", error);
+                cordova.plugins.notification.local.cancel(downloadId);
+                downloadOperating = null; // Reset the downloadOperating state
+                if (downloadTasks.length > 0) {
+                    currentIndex++;
+                }
+                if (currentIndex < downloadTasks.length) {
+                    const nextFileData = downloadTasks[currentIndex];
+                    const nextDownloadId = nextFileData.id;
+                    startDownload(nextDownloadId);
+                }
+            };
+            // Download Complete UI
+            function createCompleteUI(nativeURL, fileName) {
+                var list = document.createElement('li');
+                list.className = "";
+                list.innerHTML = `
+                    <a class="item-link no-ripple">
+                        <div class="item-content">
+                        <div class="item-media">
+                            <div class="overlay">
+                            <div class="actions hide">
+                                <a href="#">
+                                    <i class="f7-icons play_downloaded_video" data-url="${nativeURL}">play_circle</i>
+                                </a>
+                            </div>
+                            <img src="../back_placeholder.jpeg" />
+                            </div>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                            <div class="item-title">${fileName}</div>
+                            </div>
+                            <div class="item-subtitle">
+                            <span style="display: block;">Movie</span>
+                            </div>
+                            <div class="item-text">
+                            <p style="margin-top: 2px; color: var(--f7-theme-color);">Downloaded</p>
+                            </div>
+                        </div>
+                        </div>
+                    </a>
+                `
+                downloadedDOM.appendChild(list);
+            }
+            // Notifications 
+            function updateProgressNotification(downloadedBytes, downloadId, percentage, totalBytes) {
+                var obj = downloadTasks.find(downloadTask => downloadTask.id == downloadId);
+                const notification = {
+                    id: downloadId,
+                    title: obj.title,
+                    text: `${downloadedBytes} of ${totalBytes}`,
+                    progressBar: { value: percentage },
+                    actions: [
+                        { id: downloadId, title: 'Pause' }
+                    ]
+                };
+                cordova.plugins.notification.local.schedule(notification);
+            }
+
+            function downloadCompletedNotification(downloadId) {
+                var obj = downloadTasks.find(downloadTask => downloadTask.id == downloadId);
+                cordova.plugins.notification.local.cancel(downloadId);
+                const completeNotification = {
+                    id: downloadId + 1,
+                    title: 'Download Complete!',
+                    text: `${obj.title} finished successfully.`,
+                };
+                cordova.plugins.notification.local.schedule(completeNotification);
+            }
+            // Cancel download
+            function cancelDownload(downloadId) {
+                if (downloads[downloadId]) {
+                    downloads[downloadId].cancel();
+                }
+                cordova.plugins.notification.local.cancel(downloadId);
+                var list = document.getElementById(`${downloadId}_download_id`);
+                downloadDOM.removeChild(list);
+                delete downloads[downloadId]; // Remove the canceled download from the list
+                downloadTasks = downloadTasks.filter(downloadTask => downloadTask.id != downloadId);
+                console.log('Download tasks array with filtered task, ', downloadTasks);
+
+                downloadOperating = null; // Reset the downloadOperating state
+                // if (downloadTasks.length > 0) {
+                //     currentIndex++;
+                // }
+                if (currentIndex < downloadTasks.length) {
+                    const nextFileData = downloadTasks[currentIndex];
+                    const nextDownloadId = nextFileData.id;
+                    startDownload(nextDownloadId);
+                }
+            }
+            // Commence download logic
+            console.log('Initial download tasks ', downloadTasks);
+            if ($store.state.fileName) {
+                var file = {
+                    id: $store.state.id,
+                    // uriString: props.url,
+                    uriString: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_30mb.mp4',
+                    fileName: $store.state.fileName,
+                    title: $store.state.title,
+                    backdrop: $store.state.backdrop
+                };
+                if (!downloadTasks.some(downloadTask => downloadTask.fileName == file.fileName)) {
+                    downloadTasks.push(file);
+                    console.log('Download task didnot exist pushed file ,', file);
+                    if (downloadOperating) {
+                        console.log('Download operation existed creating progress');
+                        createProgressUI(file.id);
+                    } else {
+                        console.log('Download operation non existant creating progress and calling start download');
+                        createProgressUI(file.id); // Create a progress element for the new download.
+                        startDownload(file.id);
+                    }
+                } else {
+                    console.log('Download task already exists');
+                }
+            } else {
+                console.log('No file name passed no downloaded was scheduled ...');
+            }
+            // Capture other events
+            $('.downloads-page-content').on('click', (event) => {
+                if (event.target.classList.contains('cancel_download_btn')) {
+                    let id = event.target.dataset.id;
+                    cancelDownload(id);
+                }
+            })
+        })
+        // Return render function
+        return $render;
+    }
+</script>
