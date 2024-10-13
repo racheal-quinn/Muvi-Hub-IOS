@@ -6,6 +6,9 @@
         Apache Cordova Team
     </author>
     <preference name="AutoHideSplashScreen" value="false" />
+    <platform name="ios">
+        <preference name="SWIFT_VERSION" value="5.0" />
+    </platform>
     <preference name="FadeSplashScreen" value="true"/>
     <content src="index.html" />
     <allow-intent href="http://*/*" />

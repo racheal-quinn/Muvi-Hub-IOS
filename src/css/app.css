@@ -36,7 +36,7 @@ body {
 .container .content {
   display: grid;
   grid-auto-flow: column;
-  gap: 15px;
+  gap: 5px;
   overflow-x: scroll;
 }
 
