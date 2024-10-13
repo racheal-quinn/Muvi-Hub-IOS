@@ -41,19 +41,6 @@
     "copy-webpack-plugin": "^12.0.2",
     "cordova-androidx-build": "^1.0.4",
     "cordova-ios": "^7.1.1",
-    "cordova-plugin-background-mode": "github:brunochikuji/cordova-plugin-background-mode",
-    "cordova-plugin-badge": "^0.8.9",
-    "cordova-plugin-deeplinks": "^1.1.1",
-    "cordova-plugin-device": "^2.1.0",
-    "cordova-plugin-downloader": "github:asadaries/cordova-plugin-downloader",
-    "cordova-plugin-file": "^8.0.1",
-    "cordova-plugin-file-transfer": "^2.0.0",
-    "cordova-plugin-inappbrowser": "github:apache/cordova-plugin-inappbrowser",
-    "cordova-plugin-local-notification": "github:katzer/cordova-plugin-local-notifications",
-    "cordova-plugin-local-notifications": "^1.0.0",
-    "cordova-plugin-splashscreen": "github:apache/cordova-plugin-splashscreen",
-    "cordova-plugin-statusbar": "github:apache/cordova-plugin-statusbar",
-    "cordova-plugin-streaming-media": "github:danilf16/cordova-plugin-streaming-media",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.9.1",
@@ -81,7 +68,6 @@
     ],
     "plugins": {
       "cordova-plugin-streaming-media": {},
-      "cordova-plugin-downloader": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-file": {
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
@@ -91,10 +77,6 @@
       "cordova-plugin-background-mode": {},
       "cordova-plugin-local-notification": {
         "ANDROID_SUPPORT_V4_VERSION": "26.+"
-      },
-      "admob-plus-cordova": {
-        "APP_ID_ANDROID": "ca-app-pub-2115223186894781~3348299908",
-        "PLAY_SERVICES_VERSION": "23.0.0"
       },
       "cordova-plugin-statusbar": {},
       "cordova-plugin-inappbrowser": {}
